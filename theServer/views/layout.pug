@@ -1,0 +1,183 @@
+include mixins/mixins
+
+doctype html
+
+html(lang="en-US")
+
+  head
+  
+    meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    block metas
+
+    block title
+    
+    link(href='data:image/x-icon;', type='image/x-icon', rel='shortcut icon') 
+    intercept-url(pattern="/favicon.ico" access="ROLE_ANONYMOUS")
+    link(href='/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/css/main1.css', rel='stylesheet')
+    block links
+
+    script(src='/javascripts/jquery-min-3.1.1.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
+    block headScripts
+
+  body
+
+    .wrapper
+
+      header
+        .header
+
+          nav.navbar.navbar-default.navbar-static-top
+            .container
+
+              .navbar-header
+                button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false',  aria-controls='navbar')
+                  span.sr-only Toggle navigation
+                  span.icon-bar
+                  span.icon-bar
+                  span.icon-bar
+                a.brand(href='/')
+                  img(width="225" src="/images/logo-2016-2.png")
+
+              if currentUser
+                - var username = currentUser.name()
+
+              .navbar-collapse.collapse(id='navbar', aria-expanded='false', style='height: 1px;')
+                ul.nav.navbar-nav.navbar-right
+
+                  if currentUser
+
+                    if reqUrl !== '/userhome'
+                      li 
+                        a.navbar-link(href='/userhome', data-toggle='collapse', data-target='.navbar-collapse.in') Home
+
+                    if reqUrl !== '/membersonly'
+                      li 
+                        a.navbar-link(href='/membersonly', data-toggle='collapse', data-target='.navbar-collapse.in') Members Only!
+
+                    li 
+                      a.login-link(href='/logout', data-toggle='collapse', data-target='.navbar-collapse.in') Log Out
+
+
+                  else
+
+                    if reqUrl !== '/'
+                      li 
+                        a.navbar-link(href='/', data-toggle='collapse', data-target='.navbar-collapse.in') Home
+
+                    if reqUrl !== '/membersonly'
+                      li 
+                        a.navbar-link(href='/membersonly', data-toggle='collapse', data-target='.navbar-collapse.in') Members Only!
+
+                    if reqUrl !== '/login'
+                      li 
+                        a.login-link(href='/login', data-toggle='collapse', data-target='.navbar-collapse.in') Log In
+
+                    if reqUrl !== '/signup'
+                      li 
+                        a.signup-link(href='/signup', data-toggle='collapse', data-target='.navbar-collapse.in') Sign Up
+      
+
+
+
+      .view
+
+        script.
+          var is_safari = (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1)
+
+        block content
+
+
+
+      footer
+        .footer
+          br
+          .container
+            .row
+              .col-md-2.col-sm-12.col-xs-12
+                .row
+                  .col-md-12.col-sm-6.col-xs-6
+                    a(href="https://itunes.apple.com/us/" target="_blank")
+                      img(src="/images/ios.svg" width="125" height="54" alt="Get it for iOS" class="apple")
+
+                  .col-md-12.col-sm-6.col-xs-6
+                    a(href="https://play.google.com/store/" target="_blank")
+                      img(src="/images/android.svg" width="125" height="54" alt="Get it for Android" class="android")
+
+              .col-md-6.col-sm-12.col-xs-12
+                .row
+                  .col-md-5.col-md-offset-1.col-sm-6.col-xs-6
+                    span.title-footer Company
+
+                    hr.under
+
+                    a(href="/about") About
+                    br
+
+                    a(href="/customerservice") Customer Service
+                    br
+
+                    a(href="/pricing") Pricing
+                    br
+
+                    a(href="/contact") Contact
+
+                    br.mobile-only
+
+                    br.mobile-only
+
+
+                  .col-md-5.col-md-offset-1.col-sm-6.col-xs-6
+                    span.title-footer Connect
+
+                    hr.under
+
+                    a(href="/loginorsignup") Facebook
+                    br
+
+                    a(href="/loginorsignup") Twitter
+                    br
+
+                    a(href="/loginorsignup") Yelp
+                    br
+
+                    a(href="/events") Events
+                    br
+
+                    a(href="/blog") Blog
+
+              .col-md-4.col-sm-12.col-xs-12
+                span.title-footer Subscribe
+                hr.under
+                p Stay informed with the latest products, updates and notices from ThisGreatApp!
+                form.form-inline.form-footer(name="form")
+                  .input-group
+                    input.form-control(type="email" placeholder="Enter email" required="")
+                    span.input-group-btn
+                      button.btn.btn-default(type="submit" disabled="disabled") Submit
+
+
+          br
+          hr
+          br
+
+          .container
+            .last-left
+              .address-info
+                span 99 Irving Plaza, 95th floor, New York, NY 10003
+
+              span.phone-info (212) 555-5555
+
+          .container
+            .last-left.bottom-row
+              a(class="legal-link" href="/") © 2016 ThisGreatApp!, Inc.
+              a(class="legal-link" href="/privacy") Privacy
+              a(class="legal-link" href="/terms") Terms
+
+
+    
+    block bodyScripts
+

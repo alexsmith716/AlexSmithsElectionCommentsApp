@@ -1,0 +1,288 @@
+extends layout
+
+block metas
+  meta(name="csrf-token", content=`${csrfToken}`)
+
+block title
+  title User Profile
+  
+block links
+
+block headScripts
+
+block bodyScripts
+  script(src='/javascripts/userProfileHelpers.js')
+
+block content
+
+  .modal.fade(id='editProfileModalAlert', name="editProfileFormModalAlert", tabindex='-1')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type="button" data-dismiss="modal") &times;
+          h4.modal-title Edit Profile Update Alert
+        .modal-body
+
+          .editProfileModalAlertSuccess.hide(style="margin-top: 10px; margin-bottom: 22px;")
+            alert.alert-success
+              strong
+          
+          .editProfileModalAlertDanger.hide(style="margin-top: 10px; margin-bottom: 22px;")
+            alert.alert-danger
+              strong
+
+          .editProfileModalAlertWarning.hide(style="margin-top: 10px; margin-bottom: 22px;")
+            alert.alert-warning
+              strong
+
+          button(class="btn btn-default btn-md" data-dismiss="modal") OK
+
+        .modal-footer
+
+
+  .modal.fade(id="editProfileFormModal", name="editProfileFormModal", tabindex="-1")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type="button" data-dismiss="modal") &times;
+          h4.modal-title Edit your profile
+
+        .modal-body
+
+          form(action="https://localhost:3000/api/evaluateuserprofile", id="editProfileForm", name="editProfileForm", method="post", enctype="application/x-www-form-urlencoded")
+
+            fieldset
+
+              .form-group
+
+                label.control-label(id="editProfileFormLabelCurrent")
+                div(class="flex-containerMainCentered")
+                  div(class="flex-containerSubProfile")
+                    div.dont-break-out(id="modalFormElementValueCurrent", style="font-size: 1.0em;")
+
+              .form-group
+
+                label.control-label(id="editProfileFormLabelUpdated")
+
+                div(style="height:50px; width:100%; style=margin-top:10px;")
+
+                  div.hide(id="editProfileInputElementParent", style="position:absolute; width:100%; padding-right: 36px;")
+                    input.form-control.input-md(id="editProfileInputElement", name="inputElement", autofocus)
+              
+                  div.hide(id="editProfileSelectElementParent", style="position:absolute; width:100%; padding-right: 36px;")
+                    +selectStateFormControl()
+
+                .text-danger.hide.editProfileFormError
+
+              div(class="modalCancelSubmitBtns")
+                button(class="btn btn-default btn-md" data-dismiss="modal") Cancel
+                | &nbsp;&nbsp;&nbsp;&nbsp;
+                button(type="submit", class="btn btn-primary btn-md", id="submitEditProfileBtn") Submit
+
+        .modal-footer
+          .loading(style="display:none;")
+
+
+  .main
+    br
+    br
+
+    .container
+
+      .row
+      
+        .col-xs-12.col-sm-3.col-md-3.col-md-3
+          .text-center
+            img(src="/images/someUser.png")
+      
+      
+        .col-xs-12.col-sm-7.col-md-7.col-md-7
+      
+
+          .row
+            div(style="height:25px")
+
+
+          .row
+            .col-xs-12
+              p #{csrfToken}
+
+              - if (error != undefined)
+                .alert.alert-danger(role="alert") #{error}
+      
+
+          .row
+      
+            - var isodate = `${currentUser.previouslogin}`
+            - var millis = Date.parse(isodate)
+            .col-xs-12
+              .pull-right.text-muted.alertEditUser
+                small
+                  i Last login:
+                    | &nbsp;
+                    +newAppDate(millis,true)
+      
+          .row
+            div(style="height:25px")
+      
+          
+          .row
+      
+            .col-xs-12
+              ul.nav.nav-tabs
+                li.active
+                  a(id="personalInfoToggle" href="#home" data-toggle="tab")
+                    h4 Profile
+                li
+                  a(id="accountInfoToggle" href="#profile" data-toggle="tab")
+                    h4 Account
+      
+              .tab-content
+      
+                div(class="tab-pane active" id="home")
+      
+                  div(style="height:16px")
+      
+      
+                  div
+                    div
+                      h4
+                        i First Name:
+      
+                    div(class="flex-containerMainCentered")
+      
+                      div(class="flex-containerSubProfile")
+      
+                        div(class="dont-break-out first-name" style="font-size: 1.0em;") #{currentUser.firstname}
+
+                      div(class="personalInfo", style="display:none;", data-id="first-name", data-formelementtype="text")
+                        button(class="btn btn-primary btn-md editFormElement") Edit
+      
+                    div(style="height:12px")
+      
+      
+                  div
+                    div
+                      h4
+                        i Last Name:
+      
+                    div(class="flex-containerMainCentered")
+      
+                      div(class="flex-containerSubProfile")
+      
+                        div(class="dont-break-out last-name" style="font-size: 1.0em;") #{currentUser.lastname}
+
+                      div(class="personalInfo", style="display:none;",  data-id="last-name", data-formelementtype="text")
+                        button(class="btn btn-primary btn-md editFormElement") Edit
+      
+                    div(style="height:12px")
+      
+      
+                  div
+                    div
+                      h4
+                        i City:
+      
+                    div(class="flex-containerMainCentered")
+      
+                      div(class="flex-containerSubProfile")
+      
+                        div(class="dont-break-out city" style="font-size: 1.0em;") #{currentUser.city}
+
+                      div(class="personalInfo", style="display:none;",  data-id="city", data-formelementtype="text")
+                        button(class="btn btn-primary btn-md editFormElement") Edit
+      
+                    div(style="height:12px")
+      
+      
+                  div
+                    div
+                      h4
+                        i State:
+      
+                    div(class="flex-containerMainCentered")
+      
+                      div(class="flex-containerSubProfile")
+      
+                        div(class="state" style="font-size: 1.0em;") #{currentUser.state.full}
+
+                      div(class="personalInfo", style="display:none;", data-id="state", data-formelementtype="select")
+                        button(class="btn btn-primary btn-md editFormElement") Edit
+      
+      
+                  div(style="height:28px")
+      
+                  div
+                    button(id="personalInfoUpdate" class="btn btn-success btn-md nav-toggle") Update Personal info
+      
+      
+                div(class="tab-pane" id="profile")
+      
+                  div(style="height:16px")
+      
+      
+                  div
+                    div
+                      h4
+                        i Username:
+      
+                    div(class="flex-containerMainCentered")
+      
+                      div(class="flex-containerSubProfile")
+      
+                        div(class="text-muted controlOverflow" style="font-size: 1.0em;") #{currentUser.displayname}
+                    small.text-muted
+                      | &nbsp;&nbsp;&nbsp;
+                      i *Username cannot be changed
+      
+      
+      
+                    div(style="height:12px")
+
+
+      
+                  div
+                    div
+                      h4
+                        i Email:
+      
+                    div(class="flex-containerMainCentered")
+      
+                      div(class="flex-containerSubProfile")
+      
+                        div(class="dont-break-out email" style="font-size: 1.0em;") #{currentUser.email}
+
+                      div(class="accountInfo", style="display:none;",  data-id="email", data-formelementtype="email")
+                        button(class="btn btn-primary btn-md editFormElement") Edit
+      
+                    div(style="height:12px")
+      
+      
+
+                  div
+                    div
+                      h4
+                        i Password:
+      
+                    div(class="flex-containerMainCentered")
+      
+                      div(class="flex-containerSubProfile")
+      
+                        div(class="dont-break-out password" style="font-size: 1.0em;") ********
+      
+                      div(class="accountInfo", style="display:none;", data-id="password", data-formelementtype="password")
+                        button(class="btn btn-primary btn-md editFormElement") Edit
+                        
+                    small.text-muted
+                      | &nbsp;&nbsp;&nbsp;
+                      i *Password is hidden 
+      
+      
+                  div(style="height:28px")
+      
+                  div
+                    button(id="accountInfoUpdate" class="btn btn-success btn-md nav-toggle") Update Account info
+
+    br
+    br
+

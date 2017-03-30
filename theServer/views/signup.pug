@@ -1,0 +1,176 @@
+extends layout
+
+block metas
+  meta(name="csrf-token", content=`${csrfToken}`)
+
+block title
+  title Sign up
+  
+block links
+
+block headScripts
+
+block bodyScripts
+  if isSafari
+    script(src='/javascripts/safari/signUpHelpers.js')
+  if !isSafari
+    script(src='/javascripts/safari/signUpHelpers.js')
+
+block content
+
+  .main
+
+    .container
+
+      .row
+
+        .col-lg-9.col-md-10.col-sm-11.col-xs-12.col-centered
+
+          .panel-body
+
+            h1.form-title Sign up 3/29/17 Good
+
+            p csrf token: #{csrfToken}
+
+            if isSafari
+              p user-agent: safari
+
+            if !isSafari
+              p user-agent: chrome
+
+            if (error != undefined)
+              .alert.alert-danger(role="alert") #{error}
+
+
+            form(action="https://localhost:3000/api/signupuser", id="signUpForm", name="signUpForm", method="post", enctype="application/x-www-form-urlencoded")
+
+              .signUpFormAlertSuccess.hide(style="margin-top: 0px; margin-bottom: 0px;")
+                .alert.alert-success(role="alert")
+              
+              .signUpFormAlertDanger.hide(style="margin-top: 0px; margin-bottom: 0px;")
+                .alert.alert-danger(role="alert")
+    
+              .signUpFormAlertWarning.hide(style="margin-top: 0px; margin-bottom: 0px;")
+                .alert.alert-warning(role="alert")
+
+              div(id="required-fields")
+                .row
+                  .col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="displayname") Username
+  
+                      input.form-control.input-md(type="text", id="displayname", name="displayname", pattern="[A-Za-z0-9_]{4,21}", title="Username must be 4-21   characters long. Letters, numbers, underscores only, no whitespace", tabindex="1",  placeholder="Username", required)
+                      .text-muted(style="margin-top:3px;")
+                        i *Username cannot be changed after sign up
+  
+                      span.hide.error(id="displaynameError") Please fill out this field.
+
+              .row.hr-form-margin
+                hr
+
+              div(id="required-fields")
+                .row
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="email") Email Address
+  
+                      input.form-control.input-md(type="email", id="email", name="email", tabindex="2", title="Please type a valid Email Address", placeholder="Email Address", required)
+  
+                      span.hide.text-danger(id="emailImproper") Email is in improper format
+                      span.hide.error(id="emailRegistered") This email address is already in our system. Sign in, or enter a new email address
+                      span.hide.error(id="emailError") Please fill out this field.
+  
+  
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="confirmEmail") Confirm Email Address
+  
+                      input.form-control.input-md(type="email", id="confirmEmail", name="confirmEmail", tabindex="3", title="Please type a valid Email Address", placeholder="Confirm Email Address", required)
+  
+                      span.hide.text-danger(id="confirmEmailImproper") Confirm Email is in improper format
+                      span.hide.error(id="confirmEmailRegistered") This email address is already in our system. Sign in, or enter a new email address
+                      span.hide.text-danger(id="confirmEmailMatch") Emails don't match
+                      span.hide.error(id="confirmEmailError") Please fill out this field.
+  
+              .row.hr-form-margin
+                hr
+
+              div(id="required-fields")
+                .row
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+  
+                      label.control-label.sr-only(for="password") Password
+  
+                      input.form-control.input-md(type="password", id="password", name="password", pattern="[\\S]{4,}", tabindex="4", title="Password must be at least 4 characters long. No whitespace allowed", placeholder="Create Password", required)
+  
+                      span.hide.error(id="passwordError") Please fill out this field.
+      
+  
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="confirmPassword") Confirm Password
+  
+                      input.form-control.input-md(type="password", id="confirmPassword", name="confirmPassword", pattern="[\\S]{4,}", tabindex="5", title="Password must be at least 4 characters long. No whitespace allowed", placeholder="Confirm Password", required)
+                      
+                      span.hide.text-danger(id="confirmPasswordMatch") Passwords don't match
+                      span.hide.error(id="confirmPasswordError") Please fill out this field.
+
+              .row.hr-form-margin
+                hr
+
+              div(id="required-fields")
+                .row
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="firstname") First Name
+  
+                      input.form-control.input-md(type="text", id="firstname", name="firstname", pattern="\\s*(?=\\s*\\S)(.{1,35})\\s*", tabindex="6", title="Please type a valid First Name. Maximum 35 characters", placeholder="First Name", required)
+                      
+                      span.hide.error(id="firstnameError")
+  
+  
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="lastname") Last Name
+  
+                      input.form-control.input-md(type="text", id="lastname", name="lastname", pattern="\\s*(?=\\s*\\S)(.{1,35})\\s*", tabindex="7", title="Please type a valid Last Name. Maximum 35 characters", placeholder="Last Name", required)
+  
+                      span.hide.error(id="lastnameError")
+
+              .row.hr-form-margin
+                hr
+  
+              div(id="required-fields")
+                .row
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="city") City
+  
+                      input.form-control.input-md(type="text", id="city", name="city", pattern="\\s*(?=\\s*\\S)(.{1,35})\\s*", tabindex="8", title="Please type a valid City. Maximum 35 characters", placeholder="City", required)
+  
+                      span.hide.error(id="cityError")
+    
+  
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .form-group
+                      label.control-label.sr-only(for="state") State
+  
+                      +selectStateFormControl()
+                      span.hide.error(id="stateError")
+
+              .row
+                .col-xs-12(style="margin-bottom:8px;")
+                  .text-danger.hide.formerror
+                    strong
+
+              .row
+                .col-md-6.col-sm-6.col-xs-12
+                  button(type="submit", id="signUpSubmitBtn", name="signUpSubmitBtn", tabindex="10", class="btn btn-primary btn-md") Submit
+
+
+  .modal-backdrop
+     img(src="/images/ajax-loader.gif" style="position: fixed; top: 45%; left: 49%;")
+
+
+

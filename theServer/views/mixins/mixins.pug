@@ -1,0 +1,199 @@
+
+mixin newAppDate(millis,full)
+    -var date = new Date(millis);
+    -var y = date.getFullYear()
+    -var mm = date.getMonth()
+    -var d = date.getDate()
+    -var second = date.getSeconds();
+    -var minute = date.getMinutes();
+    -var hour = date.getHours();
+    -var ampm;
+    if second < 10
+        -second = '0' + second
+    if minute < 10
+        -minute = '0' + minute
+    if hour >= 12
+        -ampm = 'PM'
+    else
+        -ampm = 'AM'
+    if hour > 12
+        -hour = hour - 12
+    -var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+    -var m = monthNames[mm];
+    if full
+        -var output = m + ' ' + d + ', ' + y + ' ' + hour + ':' + minute + ' ' + ampm;
+    else
+        -var output = m + ' ' + d + ', ' + y;
+    =output
+
+
+mixin selectStateFormControlBad()
+    select.form-control(data-style="input-md btn-default btn-md", id="state", name="state", title="Please select a State", data-size="10", style="color:#787878;font-style:italic;")
+        option(value="") State
+        option(value="") -----------------------
+        option(value={"initials":"AL","full":"Alabama"}) Alabama
+        option(value={"initials":"AK","full":"Alaska"}) Alaska
+        option(value={"initials":"AZ","full":"Arizona"}) Arizona
+        option(value={"initials":"AR","full":"Arkansas"}) Arkansas
+        option(value={"initials":"CA","full":"California"}) California
+        option(value={"initials":"CO","full":"Colorado"}) Colorado
+        option(value={"initials":"CT","full":"Connecticut"}) Connecticut
+        option(value={"initials":"DE","full":"Delaware"}) Delaware
+        option(value={"initials":"DC","full":"District Of Columbia"}) District Of Columbia
+        option(value={"initials":"FL","full":"Florida"}) Florida
+        option(value={"initials":"GA","full":"Georgia"}) Georgia
+        option(value={"initials":"HI","full":"Hawaii"}) Hawaii
+        option(value={"initials":"ID","full":"Idaho"}) Idaho
+        option(value={"initials":"IL","full":"Illinois"}) Illinois
+        option(value={"initials":"IN","full":"Indiana"}) Indiana
+        option(value={"initials":"IA","full":"Iowa"}) Iowa
+        option(value={"initials":"KS","full":"Kansas"}) Kansas
+        option(value={"initials":"KY","full":"Kentucky"}) Kentucky
+        option(value={"initials":"LA","full":"Louisiana"}) Louisiana
+        option(value={"initials":"ME","full":"Maine"}) Maine
+        option(value={"initials":"MD","full":"Maryland"}) Maryland
+        option(value={"initials":"MA","full":"Massachusetts"}) Massachusetts
+        option(value={"initials":"MI","full":"Michigan"}) Michigan
+        option(value={"initials":"MN","full":"Minnesota"}) Minnesota
+        option(value={"initials":"MS","full":"Mississippi"}) Mississippi
+        option(value={"initials":"MO","full":"Missouri"}) Missouri
+        option(value={"initials":"MT","full":"Montana"}) Montana
+        option(value={"initials":"NE","full":"Nebraska"}) Nebraska
+        option(value={"initials":"NV","full":"Nevada"}) Nevada
+        option(value={"initials":"NH","full":"New Hampshire"}) New Hampshire
+        option(value={"initials":"NJ","full":"New Jersey"}) New Jersey
+        option(value={"initials":"NM","full":"New Mexico"}) New Mexico
+        option(value={"initials":"NY","full":"New York"}) New York
+        option(value={"initials":"NC","full":"North Carolina"}) North Carolina
+        option(value={"initials":"ND","full":"North Dakota"}) North Dakota
+        option(value={"initials":"OH","full":"Ohio"}) Ohio
+        option(value={"initials":"OK","full":"Oklahoma"}) Oklahoma
+        option(value={"initials":"OR","full":"Oregon"}) Oregon
+        option(value={"initials":"PA","full":"Pennsylvania"}) Pennsylvania
+        option(value={"initials":"RI","full":"Rhode Island"}) Rhode Island
+        option(value={"initials":"SC","full":"South Carolina"}) South Carolina
+        option(value={"initials":"SD","full":"South Dakota"}) South Dakota
+        option(value={"initials":"TN","full":"Tennessee"}) Tennessee
+        option(value={"initials":"TX","full":"Texas"}) Texas
+        option(value={"initials":"UT","full":"Utah"}) Utah
+        option(value={"initials":"VT","full":"Vermont"}) Vermont
+        option(value={"initials":"VA","full":"Virginia"}) Virginia
+        option(value={"initials":"WA","full":"Washington"}) Washington
+        option(value={"initials":"WV","full":"West Virginia"}) West Virginia
+        option(value={"initials":"WI","full":"Wisconsin"}) Wisconsin
+        option(value={"initials":"WY","full":"Wyoming"}) Wyoming
+
+
+mixin selectStateFormControl()
+    select.form-control(data-style="input-md btn-default btn-md", id="state", name="state", title="Please select a State", data-size="10", style="color:#787878;font-style:italic;", required)
+        option(value="") State
+        option(value="") -----------------------
+        option(value={"initials":"AL","full":"Alabama"}) Alabama
+        option(value={"initials":"AK","full":"Alaska"}) Alaska
+        option(value={"initials":"AZ","full":"Arizona"}) Arizona
+        option(value={"initials":"AR","full":"Arkansas"}) Arkansas
+        option(value={"initials":"CA","full":"California"}) California
+        option(value={"initials":"CO","full":"Colorado"}) Colorado
+        option(value={"initials":"CT","full":"Connecticut"}) Connecticut
+        option(value={"initials":"DE","full":"Delaware"}) Delaware
+        option(value={"initials":"DC","full":"District Of Columbia"}) District Of Columbia
+        option(value={"initials":"FL","full":"Florida"}) Florida
+        option(value={"initials":"GA","full":"Georgia"}) Georgia
+        option(value={"initials":"HI","full":"Hawaii"}) Hawaii
+        option(value={"initials":"ID","full":"Idaho"}) Idaho
+        option(value={"initials":"IL","full":"Illinois"}) Illinois
+        option(value={"initials":"IN","full":"Indiana"}) Indiana
+        option(value={"initials":"IA","full":"Iowa"}) Iowa
+        option(value={"initials":"KS","full":"Kansas"}) Kansas
+        option(value={"initials":"KY","full":"Kentucky"}) Kentucky
+        option(value={"initials":"LA","full":"Louisiana"}) Louisiana
+        option(value={"initials":"ME","full":"Maine"}) Maine
+        option(value={"initials":"MD","full":"Maryland"}) Maryland
+        option(value={"initials":"MA","full":"Massachusetts"}) Massachusetts
+        option(value={"initials":"MI","full":"Michigan"}) Michigan
+        option(value={"initials":"MN","full":"Minnesota"}) Minnesota
+        option(value={"initials":"MS","full":"Mississippi"}) Mississippi
+        option(value={"initials":"MO","full":"Missouri"}) Missouri
+        option(value={"initials":"MT","full":"Montana"}) Montana
+        option(value={"initials":"NE","full":"Nebraska"}) Nebraska
+        option(value={"initials":"NV","full":"Nevada"}) Nevada
+        option(value={"initials":"NH","full":"New Hampshire"}) New Hampshire
+        option(value={"initials":"NJ","full":"New Jersey"}) New Jersey
+        option(value={"initials":"NM","full":"New Mexico"}) New Mexico
+        option(value={"initials":"NY","full":"New York"}) New York
+        option(value={"initials":"NC","full":"North Carolina"}) North Carolina
+        option(value={"initials":"ND","full":"North Dakota"}) North Dakota
+        option(value={"initials":"OH","full":"Ohio"}) Ohio
+        option(value={"initials":"OK","full":"Oklahoma"}) Oklahoma
+        option(value={"initials":"OR","full":"Oregon"}) Oregon
+        option(value={"initials":"PA","full":"Pennsylvania"}) Pennsylvania
+        option(value={"initials":"RI","full":"Rhode Island"}) Rhode Island
+        option(value={"initials":"SC","full":"South Carolina"}) South Carolina
+        option(value={"initials":"SD","full":"South Dakota"}) South Dakota
+        option(value={"initials":"TN","full":"Tennessee"}) Tennessee
+        option(value={"initials":"TX","full":"Texas"}) Texas
+        option(value={"initials":"UT","full":"Utah"}) Utah
+        option(value={"initials":"VT","full":"Vermont"}) Vermont
+        option(value={"initials":"VA","full":"Virginia"}) Virginia
+        option(value={"initials":"WA","full":"Washington"}) Washington
+        option(value={"initials":"WV","full":"West Virginia"}) West Virginia
+        option(value={"initials":"WI","full":"Wisconsin"}) Wisconsin
+        option(value={"initials":"WY","full":"Wyoming"}) Wyoming
+
+
+mixin selectStateFormControl2()
+    select.form-control.form-element(data-style="input-md btn-default btn-md", id="state", name="state", title="Please select your State", data-size="10", style="color:#787878;font-style:italic;", required)
+        option(value="") State
+        option(value="") -----------------------
+        option(value="AL") Alabama
+        option(value="AK") Alaska
+        option(value="AZ") Arizona
+        option(value="AR") Arkansas
+        option(value="CA") California
+        option(value="CO") Colorado
+        option(value="CT") Connecticut
+        option(value="DE") Delaware
+        option(value="DC") District Of Columbia
+        option(value="FL") Florida
+        option(value="GA") Georgia
+        option(value="HI") Hawaii
+        option(value="ID") Idaho
+        option(value="IL") Illinois
+        option(value="IN") Indiana
+        option(value="IA") Iowa
+        option(value="KS") Kansas
+        option(value="KY") Kentucky
+        option(value="LA") Louisiana
+        option(value="ME") Maine
+        option(value="MD") Maryland
+        option(value="MA") Massachusetts
+        option(value="MI") Michigan
+        option(value="MN") Minnesota
+        option(value="MS") Mississippi
+        option(value="MO") Missouri
+        option(value="MT") Montana
+        option(value="NE") Nebraska
+        option(value="NV") Nevada
+        option(value="NH") New Hampshire
+        option(value="NJ") New Jersey
+        option(value="NM") New Mexico
+        option(value="NY") New York
+        option(value="NC") North Carolina
+        option(value="ND") North Dakota
+        option(value="OH") Ohio
+        option(value="OK") Oklahoma
+        option(value="OR") Oregon
+        option(value="PA") Pennsylvania
+        option(value="RI") Rhode Island
+        option(value="SC") South Carolina
+        option(value="SD") South Dakota
+        option(value="TN") Tennessee
+        option(value="TX") Texas
+        option(value="UT") Utah
+        option(value="VT") Vermont
+        option(value="VA") Virginia
+        option(value="WA") Washington
+        option(value="WV") West Virginia
+        option(value="WI") Wisconsin
+        option(value="WY") Wyoming
+

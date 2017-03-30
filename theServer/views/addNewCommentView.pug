@@ -1,0 +1,82 @@
+extends layout
+
+include mixins/mixins
+
+block bodyScripts
+  script(src='/javascripts/onbeforeunload.js')
+  
+
+block content
+
+  .page-header
+   h3 #{cu}, please complete your profile & add a comment
+
+  .row
+    .col-xs-12.col-sm-8
+      .error= message
+
+      form(role="form", id="addNewCommentViewFormID", action="", method="post")
+
+          .form-group
+            label.control-label(for="firstName") First Name
+            div
+              input.form-control(id="firstName", name="firstName", placeholder="first name", maxlength="10", type="text")
+  
+  
+          .form-group
+            label.control-label(for="lastName") Last Name
+            div
+              input.form-control(id="lastName", name="lastName", placeholder="last name", maxlength="10", type="text")
+  
+  
+          .form-group
+            label.control-label(for="city") City
+            div
+              input.form-control(id="city", name="city", placeholder="city", maxlength="10", type="text")
+  
+  
+          .form-group
+            label.control-label(for="state") State
+            div
+              +selectStateFormControl()
+  
+  
+          .form-group
+            label.control-label(for="candidate") Which candidate do you support?
+            div
+              .radio
+                label(for="candidate1")
+                  input(type="radio", id="candidate1", name="candidate", value="I support Donald Trump")
+                  span I support Donald Trump
+              .radio
+                label(for="candidate2")
+                  input(type="radio", id="candidate2", name="candidate", value="I support Hillary Clinton")
+                  span I support Hillary Clinton
+              .radio
+                label(for="candidate0")
+                  input(type="radio", id="candidate0", name="candidate", value="I support neither candidate")
+                  span I support neither candidate
+
+
+          .form-group
+            label.control-label(for="comment") Comment about the candidates
+            div
+              textarea.form-control(id="comment", name="comment", placeholder="your comments", rows="3", maxlength="350")
+
+
+  
+          .col-xs-12(style="height:15px;")
+  
+          .form-group
+            button(type="submit", class="btn btn-primary") Submit Form!
+  
+          .form-group
+            div.button(class="btn clrFavForm btn-default", id="clearFormBtn") Clear Form
+  
+          .form-group
+            div.button(class="btn clrFavForm btn-warning", id="cancelFormBtn") Cancel Form
+  
+          .col-xs-12(style="height:15px;")
+
+    .col-xs-12.col-sm-4
+      div.lead= sideBlurb

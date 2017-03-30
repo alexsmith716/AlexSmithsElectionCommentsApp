@@ -1,0 +1,58 @@
+extends layout
+
+block metas
+
+block title
+  title Notify Error
+  
+block links
+
+block headScripts
+
+block bodyScripts
+
+block content
+
+  .main
+
+    .container
+
+      .row
+      
+        .col-lg-9.col-md-10.col-sm-11.col-xs-12.col-centered
+
+          .panel-body
+
+            if (message != undefined)
+
+              if(type === 'success')
+                .alert.alert-success(role="alert") #{message}
+
+              if(type === 'warning')
+                .alert.alert-warning(role="alert") #{message}
+
+              if(type === 'danger')
+                .alert.alert-danger(role="alert") #{message}
+
+            div
+              h2
+                | This is Election App 2016! 
+                br
+                h3 Start now to participate in the discussion!
+            
+            br
+
+            div
+              p Please
+                | 
+                a.highlight(href='/login') Log In
+                |&nbsp;or&nbsp;
+                a.highlight(href='/signup') Sign Up
+                |&nbsp;to use Election App 2016.
+
+              p Contact
+                | 
+                a.highlight(href='/customerservice') Customer Service
+                |&nbsp;for questions and comments.
+
+

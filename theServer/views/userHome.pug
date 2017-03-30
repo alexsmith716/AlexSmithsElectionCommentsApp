@@ -1,0 +1,68 @@
+extends layout
+
+block metas
+
+block title
+  title Election App 2016!
+  
+block links
+
+block headScripts
+
+block bodyScripts
+
+block content
+
+  .main
+    br
+    br
+
+    .container
+
+      .row
+      
+        .col-xs-12.col-sm-3.col-md-3.col-lg-3
+
+          div(align="center")
+            img(src="/images/someUser.png")
+          br
+      
+      
+        .col-xs-12.col-sm-7.col-md-7.col-lg-7
+
+          div(align="center")
+            
+            div
+              - var isodate= `${currentUser.previouslogin}`
+              - var millis = Date.parse(isodate)
+              
+              .text-muted.alertEditUser
+                small
+                  i Last login:
+                    | &nbsp;
+                    +newAppDate(millis,true)
+              br
+              br
+  
+            div
+              a.btn.btn-primary.btn-md(href="/userprofile") Account Settings
+              br
+              br
+              a.btn.btn-primary.btn-md(href="/resources") Resources
+              br
+              br
+              a.btn.btn-primary.btn-md(href="/comments") Latest Comments
+              br
+              br
+              a.btn.btn-primary.btn-md(href="") My Comments
+              br
+              br
+              a.btn.btn-primary.btn-md(href="") Most Commented
+              br
+              br
+              a.btn.btn-primary.btn-md(href="") Most Recommended
+ 
+
+    br
+    br
+

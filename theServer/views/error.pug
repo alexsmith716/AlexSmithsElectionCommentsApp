@@ -1,0 +1,42 @@
+extends layout
+
+block metas
+
+block title
+  title Development Error Stacktrace
+  
+block links
+
+block headScripts
+
+block bodyScripts
+
+block content
+
+  .main
+
+    .container
+
+      .row
+
+        .col-lg-9.col-md-10.col-sm-11.col-xs-12.col-centered
+
+          .panel-body
+
+            if (error != undefined)
+              .alert.alert-danger(role="alert") #{error}
+
+            .signUpFormAlertSuccess.hide(style="margin-top: 0px; margin-bottom: 0px;")
+              .alert.alert-success(role="alert")
+
+            .signUpFormAlertDanger.hide(style="margin-top: 0px; margin-bottom: 0px;")
+              .alert.alert-danger(role="alert")
+
+            .signUpFormAlertWarning.hide(style="margin-top: 0px; margin-bottom: 0px;")
+              .alert.alert-warning(role="alert")
+
+            h1= message
+
+            h2= error.status
+
+            pre #{error.stack}

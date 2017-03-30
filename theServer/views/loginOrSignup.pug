@@ -1,0 +1,54 @@
+extends layout
+
+block metas
+
+block title
+  title Log In or Sign up
+  
+block links
+
+block headScripts
+
+block bodyScripts
+
+block content
+
+  .main
+
+    .container
+
+      .row
+      
+        .col-lg-9.col-md-10.col-sm-11.col-xs-12.col-centered
+
+          .panel-body
+
+            if (error != undefined)
+              .alert.alert-danger(role="alert") #{error}
+
+            .signUpFormAlertSuccess.hide(style="margin-top: 0px; margin-bottom: 0px;")
+              .alert.alert-success(role="alert")
+
+            .signUpFormAlertDanger.hide(style="margin-top: 0px; margin-bottom: 0px;")
+              .alert.alert-danger(role="alert")
+
+            .signUpFormAlertWarning.hide(style="margin-top: 0px; margin-bottom: 0px;")
+              .alert.alert-warning(role="alert")
+
+            div
+              h2
+                | Only Registered Users can access this page.
+                br
+                h3 Start now to participate in the discussion!
+            
+            br
+
+            div
+              p Please
+                | 
+                a.highlight(href='/login') Log In
+                |&nbsp;or&nbsp;
+                a.highlight(href='/signup') Sign Up
+                |&nbsp;to use Election App 2016.
+
+

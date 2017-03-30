@@ -1,0 +1,46 @@
+extends layout
+
+block metas
+
+block title
+  title= title
+  
+block links
+
+block headScripts
+
+block bodyScripts
+
+block content
+
+  .main
+
+    .container
+
+      .row
+
+        .col-lg-9.col-md-10.col-sm-11.col-xs-12.col-centered
+
+          .panel-body
+
+            h3= pageHeader.header
+
+            br
+
+            p !{(content).replace(/\n/g, '<br/>')}
+
+            br
+
+            p Please
+              | 
+              a.highlight(href='/') visit our homepage
+              |&nbsp;or&nbsp;
+              a.highlight(href='/login') Log In
+              |&nbsp;or&nbsp;
+              a.highlight(href='/signup') Sign Up
+              |&nbsp;to use Election App 2017.
+
+
+
+
+
