@@ -1,5 +1,7 @@
 
 var app = require('../../app');
+var fs  = require('fs');
+var https   = require('https');
 var request = require('request');
 var passport = require('passport');
 var pugCompiler = require('../../shared/pugCompiler.js');
@@ -8,40 +10,60 @@ var sanitizeInputModule = require('../../shared/sanitizeInput.js');
 require('../../shared/sessionPrototype');
 var serverSideValidation = require('../../shared/serverSideValidation.js');
 
-console.log('####### > serverMainCtrls > process.env.NODE_ENV: ', process.env.NODE_ENV);
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 
 var apiOptions = {
   server : 'https://localhost:3000'
 };
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
 if (process.env.NODE_ENV === 'production') {
   apiOptions.server = 'https://my-awesome-app123.com';
 }
 
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
+
 var _handleError = function (req, res, statusCode) {
-  console.log('####### > serverMainCtrls > _handleError > statusCode: ', statusCode)
-  var title, content;
+
+  var title;
+  var content;
+
   if (statusCode === 404) {
     title = '404, Page not found:';
     content = 'The page you requested cannot be found. Please try again. \n\n If this problem continues, please contact our Help Desk at 555-555-1234 or email customer.care@ThisGreatApp.com.';
+
   } else if (statusCode === 500) {
     title = '500, Internal server error:';
     content = 'There is a problem with our server. Please try again. \n\n If this problem continues, please contact our Help Desk at 555-555-1234 or email customer.care@ThisGreatApp.com.';
+
   } else {
     title = statusCode + ', Error processing request:';
     content = 'An Error has occurred processing your request. Please try again. \n\n If this problem continues, please contact our Help Desk at 555-555-1234 or email customer.care@ThisGreatApp.com.';
   }
-  console.log('####### > serverMainCtrls > _handleError > content: ', content);
+
   res.status(statusCode);
+
   res.render('basicView', {
     title : title,
     content : content
   });
+
 };
 
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 
 module.exports.nocache = function(req, res, next){
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -50,33 +72,44 @@ module.exports.nocache = function(req, res, next){
   next();
 }
 
+
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 
-module.exports.getLogout = function(req, res, foo){
-  console.log('####### > serverMainCtrls > getLogout > req.session1: ', req.session);
-  req.session.logout(function(err) {
+module.exports.getLogout = function(req, res){
+
+  console.log('####### > serverMainCtrls > module.exports.getLogout 1: ', req.sessionID);
+
+  req.session.destroy(function(err) {
+
+    req.logout();
+
     if(err){
+
       _handleError(req, res, 400);
+
     }else{
-      req.logout();
+
+      console.log('####### > serverMainCtrls > module.exports.getLogout 2: ', req.sessionID);
       res.redirect('/');
+
     }
+
   });
-  //delete req.session
-  //req.logout();
-  //res.redirect('/');
-  console.log('####### > serverMainCtrls > getLogout > req.session2: ', req.session);
+
 };
 
+
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
+
 module.exports.getIndex = function(req, res){
-  console.log('####### > serverMainCtrls > getIndex > req.user: ', req.user)
+
   console.log('####### > serverMainCtrls > getIndex > req.sessionID: ', req.sessionID)
-  console.log('####### > serverMainCtrls > getIndex > req.session: ', req.session)
+  //console.log('####### > serverMainCtrls > getIndex > req.session: ', req.session)
+
   var requestOptions, path;
   path = '/api/index';
   requestOptions = {
@@ -101,20 +134,27 @@ module.exports.getIndex = function(req, res){
       _handleError(req, res, response.statusCode);
     }
   });
-};/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+};
+
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-module.exports.getUserHome = function(req, res){
-  console.log('####### > serverMainCtrls > getUserHome +++')
 
+module.exports.getUserHome = function(req, res){
+
+  console.log('####### > serverMainCtrls > module.exports.getUserHome 1: ', req.sessionID);
   res.render('userHome');
 
 };
 
+
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
+
 module.exports.getComments = function(req, res){
+
   var requestOptions, path;
   path = '/api/comments';
   requestOptions = {
@@ -157,6 +197,7 @@ module.exports.getComments = function(req, res){
 
 
 module.exports.putUserProfile = function(req, res){ 
+
   var requestOptions, path, postdata;
   path = '/api/userprofile/' + res.locals.currentUser.id;
   var reqBody = req.body;
@@ -257,7 +298,13 @@ module.exports.postMainComment = function(req, res){
   }
 };
 
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
 module.exports.postSubComment = function(req, res){
+
   var requestOptions, path, postdata;
   var sanitizeSubcommentid = sanitizeInputModule(req.params.subcommentid);
   path = '/api/comments/subcomment/' + sanitizeSubcommentid;
@@ -295,23 +342,27 @@ module.exports.postSubComment = function(req, res){
 };
 
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
-/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 module.exports.getAddNewComment = function(req, res) {
+
     res.render('addNewCommentView', {
     title: 'MEANCRUDApp',
     sideBlurb: 'The 2016 presidential election is upon us! Who do you support and what are your comments regarding this hotly contested event?'
     });
+
 };
+
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 
 
 module.exports.getResetPassword = function(req, res){
-  console.log('getResetPassword +++')
+
   var hostname = req.headers.host;
   var requestOptions, path, m;
   path = '/api/resetpassword';
@@ -348,11 +399,12 @@ module.exports.getResetPassword = function(req, res){
 };
 
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 
 module.exports.postLogin = function(req, res, next){
-  console.log('####### > serverMainCtrls.js > postLogin')
-  console.log('####### > serverMainCtrls.js > postLogin > req.body.email: ', req.body.email)
-  console.log('####### > serverMainCtrls.js > postLogin > req.body.password: ', req.body.password)
+
   var requestOptions, path, postdata, m;
   path = '/api/login';
 
@@ -408,231 +460,75 @@ module.exports.postLogin = function(req, res, next){
   }
 };
 
+
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
+
 var testValidatedUserInput = function (v) {
+
   for (var key in v){
-    console.log('####### > testValidatedUserInput > ERRRROOORRRR1: ', key, ' : ', v[key]);
     if(v[key].hasOwnProperty('error')){
-      console.log('####### > testValidatedUserInput > ERRRROOORRRR2: ', key, ' : ', v[key]);
       return true;
     }
   }
+
 };
 
-module.exports.postSignup = function(req, res){
-  console.log('####### > serverMainCtrls.js > postSignup')
-  var requestOptions, path, postdata, m;
-  var validationTest = true;
-  path = '/api/signup';
-  var stateJsonObj = JSON.parse(req.body.state);
-  req.body.state = stateJsonObj;
-
-  /*console.log('####### > serverMainCtrls.js > postSignup > req.body.firstname 1:',req.body.firstname)
-  console.log('####### > serverMainCtrls.js > postSignup > req.body.lastname 1:',req.body.lastname)
-  console.log('####### > serverMainCtrls.js > postSignup > req.body.city 1:',req.body.city)*/
-
- /*
-  req.body.displayname = 'Ars';
-  req.body.email = 'aaa@aaaa.com';
-  req.body.confirmEmail = 'aaaa';
-  req.body.password = 'qq';
-  req.body.confirmpassword = '';
-  req.body.firstname = 'CaaaaaaaaaaaaaaaaXXXXaaaAzzzzzzzzzzzzzdddddd';
-  req.body.lastname = 'AaaaaaNbbbbbbbHhhhhXXXXhhhUuuuuuuuuuXxxxxxxxx';
-  req.body.city = '55555555';
-  req.body.state = { initials: 'MT', full: '' };
-*/
-
-  serverSideValidation(req, res, function(req, res, validatedUserInput) {
-
-    console.log('####### > serverMainCtrls.js > postSignup > serverSideValidation > validatedUserInput1: ', validatedUserInput);
-
-    /*console.log('####### > serverMainCtrls.js > postSignup > req.body.firstname 2:',req.body.firstname)
-    console.log('####### > serverMainCtrls.js > postSignup > req.body.lastname 2:',req.body.lastname)
-    console.log('####### > serverMainCtrls.js > postSignup > req.body.city 2:',req.body.city)*/
-
-    // Object.keys(validatedUserInput).length)
-    // if(validatedUserInput.hasOwnProperty('error'))
-    // jsonObj.hasOwnProperty('error')
-    // if(Object.keys(validatedUserInput).length > 0)
-
-
-    if(testValidatedUserInput(validatedUserInput)){
-      console.log('####### > validationTest / BAD DATA !!!!!!!');
-      // error found, send 'validatedUserInput' to signup.pug and render & display errors
-      res.render('signup', {
-        csrfToken: req.csrfToken(),
-        validatedErrors: validatedUserInput
-      });
-
-    }else{
-      console.log('####### > validationTest / GOOD DATA !!!!!!!');
-
-      postdata = {
-        displayname: req.body.displayname,
-        email: req.body.email,
-        password: req.body.password,
-        firstname: req.body.firgetSignupstname,
-        lastname: req.body.lastname,
-        city: req.body.city,
-        state: req.body.state
-      };
-    
-      requestOptions = {
-        rejectUnauthorized: false,
-        url : apiOptions.server + path,
-        method : 'POST',
-        json : postdata
-      };
-
-    }
-    
-  });
-};
-
-
-/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
-/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-
-module.exports.postSignupXXX = function(req, res){
-  console.log('####### > serverMainCtrls.js > postSignup')
-  var requestOptions, path, postdata, m;
-  path = '/api/signup';
-  var stateJsonObj = JSON.parse(req.body.state);
-  req.body.state = stateJsonObj;
-
-  postdata = {
-    displayname: req.body.displayname,
-    email: req.body.email,
-    password: req.body.password,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    city: req.body.city,
-    state: req.body.state
-  };
-
-  requestOptions = {
-    rejectUnauthorized: false,
-    url : apiOptions.server + path,
-    method : 'POST',
-    json : postdata
-  };
-
-  if (!postdata.email || !postdata.displayname || !postdata.password || !postdata.firstname || !postdata.lastname || !postdata.city || !postdata.state) {
-    m = 'All Sign up fields required'
-    res.redirect('/signup/?err='+m);
-
-  } else {
-
-    request(requestOptions, function(err, response, body) {
-
-      if (response.statusCode === 201) {
-        console.log('####### > serverMainCtrls.js > postSignup > 11111')
-        
-        passport.authenticate('local', function(err, user, info){
-          console.log('####### > serverMainCtrls.js > postSignup > passport.authenticate 000:', err)
-          if (err) {
-            console.log('####### > serverMainCtrls.js > postSignup > passport.authenticate 111')
-            _handleError(req, res, response.statusCode);
-            return;
-          }
-          if (info) {
-            console.log('####### > serverMainCtrls.js > postSignup > passport.authenticate 11000:', info)
-            _handleError(req, res, response.statusCode);
-            return;
-          }
-
-
-          if(user){
-            console.log('####### > serverMainCtrls.js > postSignup > passport.authenticate 222')
-            req.logIn(user, function(err) {
-              if (err) { 
-                console.log('####### > serverMainCtrls.js > postSignup > passport.authenticate 333')
-                _handleError(req, res, response.statusCode);
-                return;
-              }
-              req.session.save(function (err) {
-                if (err) {
-                  console.log('####### > serverMainCtrls.js > postSignup > passport.authenticate 444')
-                  _handleError(req, res, response.statusCode);
-                  return;
-                }
-                res.redirect('/userhome');
-              })
-            });
-          } else {
-            console.log('####### > serverMainCtrls.js > postSignup > passport.authenticate 555:', err)
-            _handleError(req, res, response.statusCode);
-          }
-        })(req, res, next);
-
-
-      } else if (response.statusCode === 409 ) {
-         console.log('####### > serverMainCtrls.js > postSignup > 22222')
-        m = body.message
-        res.redirect('/signup/?err='+m);
-
-      } else if (response.statusCode === 400 && body.name && body.name === 'ValidationError' ) {
-         console.log('####### > serverMainCtrls.js > postSignup > 33333')
-        _handleError(req, res, response.statusCode);
-
-      } else {
-         console.log('####### > serverMainCtrls.js > postSignup > 44444')
-        if (body.message){
-          m = body.message
-          res.redirect('/signup/?err='+m);
-        }
-        _handleError(req, res, response.statusCode);
-      }
-    });
-  }
-};
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 
 module.exports.getLogin = function(req, res) {
-  var error;
-  req.session.csrfError ? error = req.session.csrfError : null;
 
-  req.session.loginSignup(function(err) {
-    if(err){ 
+  console.log('####### > serverMainCtrls > module.exports.getLogin 1: ', req.sessionID);
+
+  req.session.regenerate(function(err) {
+
+    if(err){
+
       _handleError(req, res, 400);
+
     }else{
+
+      console.log('####### > serverMainCtrls > module.exports.getLogin 2: ', req.sessionID);
       res.render('login', {
-        csrfToken: req.csrfToken(),
-        error: error
+        csrfToken: req.csrfToken()
       });
+
     }
+
   });
 };
 
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-
-// ####### > serverMainCtrls.js > getSignup > csrfError:  undefined
 
 module.exports.getSignup = function(req, res) {
-  var error;
-  console.log('####### > serverMainCtrls.js > getSignup > req.session.csrfError: ', req.session.csrfError)
-  console.log('####### > serverMainCtrls.js > getSignup > res.locals.csrfError: ', res.locals.csrfError)
-  //req.session.csrfError ? error = req.session.csrfError : null;
-  res.locals.error ? error = res.locals.error : null;
 
-  req.session.loginSignup(function(err) {
+  req.session.regenerate(function(err) {
+
     if(err){
+
       _handleError(req, res, 400);
+
     }else{
+
       res.render('signup', {
         csrfToken: req.csrfToken()
       });
+
     }
+
   });
 };
+
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 
 module.exports.getUserProfile = function(req, res) {
@@ -663,10 +559,12 @@ module.exports.getUserProfile = function(req, res) {
 };
 
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
 module.exports.getMembersOnly = function(req, res) {
-  //console.log('####### > serverMainCtrls > getMembersOnly1 > req.user: ', req.user + ' ::::req.sessionID: ' + req.sessionID)
-  console.log('####### > serverMainCtrls > getMembersOnly > req.sessionID: ' + req.sessionID)
-  console.log('####### > serverMainCtrls > getMembersOnly > req.session: ', req.session)
+
   res.render('membersonly', {
     title: 'Members Only Page',
     pageHeader: {
@@ -677,24 +575,42 @@ module.exports.getMembersOnly = function(req, res) {
 };
 
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
 module.exports.getNotifyError = function(req, res) {
 
-  console.log('####### > serverMainCtrls.js > getNotifyError > app.locals.error: ', app.locals.error)
+  var notifyMessage = 'A website error recently occurred, please try to Log In or Sign Up again. If this problem continues, please contact customer service.';
+  var notifyMessageType = 'danger';
+  app.locals.notifyMessage ? notifyMessage = app.locals.notifyMessage : null;
+  app.locals.notifyMessageType ? notifyMessageType = app.locals.notifyMessageType : null;
 
-  var error;
-  app.locals.error ? error = app.locals.error : null;
+  console.log('####### > serverMainCtrls > module.exports.getNotifyError 1: ', req.session);
 
-  req.session.loginSignup(function(err) {
+  req.session.regenerate(function(err) {
+
     if(err){
-      _handleError(req, res, 400);
-    }else{
-      res.render('notifyError', {
-        error: error
-      });
-    }
-  });
 
+      console.log('####### > serverMainCtrls > module.exports.getNotifyError 2: ', req.session);
+      _handleError(req, res, 400);
+
+    }else{
+
+      console.log('####### > serverMainCtrls > module.exports.getNotifyError 3: ', req.session);
+      res.render('notifyError', {
+        message: notifyMessage,
+        type: notifyMessageType
+      });
+
+    };
+
+  });
 };
+
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* +++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 
 module.exports.getLoginOrSignup = function(req, res) {
@@ -714,6 +630,7 @@ module.exports.getResouces = function(req, res) {
   });
 };
 
+
 module.exports.getDummyPage = function(req, res) {
   res.render('dummypage', {
     title: 'Dummy Test Page',
@@ -722,6 +639,7 @@ module.exports.getDummyPage = function(req, res) {
     }
   });
 };
+
 
 module.exports.getAbout = function(req, res) {
   res.render('basicView', {
@@ -733,6 +651,7 @@ module.exports.getAbout = function(req, res) {
   });
 };
 
+
 module.exports.getContact = function(req, res) {
   res.render('basicView', {
     title: 'Contact',
@@ -743,6 +662,7 @@ module.exports.getContact = function(req, res) {
   });
 };
 
+
 module.exports.getTeam = function(req, res) {
   res.render('basicView', {
     title: 'Team',
@@ -752,4 +672,5 @@ module.exports.getTeam = function(req, res) {
     content: 'The team behind ThisGreatApp! are a dedicated bunch who enjoy sharing favorite places and experiences.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.'
   });
 };
+
 
