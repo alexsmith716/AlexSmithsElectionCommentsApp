@@ -28,7 +28,7 @@ block content
 
           .panel-body
 
-            h1.form-title Sign up 3/29/17 Good
+            h2.form-title Sign up
 
             p csrf token: #{csrfToken}
 
@@ -38,20 +38,20 @@ block content
             if !isSafari
               p user-agent: chrome
 
-            if (error != undefined)
-              .alert.alert-danger(role="alert") #{error}
+            if (message != undefined)
+
+              if(type === 'success')
+                .alert.alert-success(role="alert") #{message}
+
+              if(type === 'warning')
+                .alert.alert-warning(role="alert") #{message}
+
+              if(type === 'danger')
+                .alert.alert-danger(role="alert") #{message}
 
 
             form(action="https://localhost:3000/api/signupuser", id="signUpForm", name="signUpForm", method="post", enctype="application/x-www-form-urlencoded")
 
-              .signUpFormAlertSuccess.hide(style="margin-top: 0px; margin-bottom: 0px;")
-                .alert.alert-success(role="alert")
-              
-              .signUpFormAlertDanger.hide(style="margin-top: 0px; margin-bottom: 0px;")
-                .alert.alert-danger(role="alert")
-    
-              .signUpFormAlertWarning.hide(style="margin-top: 0px; margin-bottom: 0px;")
-                .alert.alert-warning(role="alert")
 
               div(id="required-fields")
                 .row

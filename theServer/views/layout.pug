@@ -40,7 +40,7 @@ html(lang="en-US")
                   span.icon-bar
                   span.icon-bar
                 a.brand(href='/')
-                  img(width="225" src="/images/logo-2016-2.png")
+                  <!-- img(width="225" src="/images/logo-2016-2.png") -->
 
               if currentUser
                 - var username = currentUser.name()
@@ -79,10 +79,11 @@ html(lang="en-US")
                     if reqUrl !== '/signup'
                       li 
                         a.signup-link(href='/signup', data-toggle='collapse', data-target='.navbar-collapse.in') Sign Up
+
+          if (multipleUserSession !== undefined)
+            .alert.alert-warning(role="alert") Alert: multiple instances of users have logged on to this account.
+
       
-
-
-
       .view
 
         script.

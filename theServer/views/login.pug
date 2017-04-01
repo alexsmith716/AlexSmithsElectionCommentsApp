@@ -54,22 +54,41 @@ block content
           .loading(style="display:none;")
     
   .main
-    br
-    br
-
+  
     .container
 
       .row
 
-        .col-lg-6.col-md-6.col-sm-8.col-xs-12.col-centered
+        .col-lg-9.col-md-10.col-sm-11.col-xs-12.col-centered
+
           .panel-body
-            h1.form-title Welcome back!
+
+            h2.form-title Welcome back!
+
             h3 Please sign in.
 
-            p #{csrfToken}
 
-            - if (error != undefined)
-              .alert.alert-danger(role="alert") #{error}
+            p csrf token: #{csrfToken}
+
+
+            if isSafari
+              p user-agent: safari
+
+            if !isSafari
+              p user-agent: chrome
+
+
+            if (message != undefined)
+
+              if(type === 'success')
+                .alert.alert-success(role="alert") #{message}
+
+              if(type === 'warning')
+                .alert.alert-warning(role="alert") #{message}
+
+              if(type === 'danger')
+                .alert.alert-danger(role="alert") #{message}
+                
 
             form(action="https://localhost:3000/api/loginuser", id="loginForm", name="loginForm", method="post", enctype="application/x-www-form-urlencoded")
 
@@ -96,7 +115,7 @@ block content
               .row
                 .col-xs-12(style="margin-top:12px;")
                   i
-                    a.highlight(href="#" id="forgotPasswordAnchor", onclick="helper.clearForgotPassword();") Forgot your password?
+                    a(href="#" id="forgotPasswordAnchor", onclick="helper.clearForgotPassword();") Forgot your password?
 
   .modal-backdrop.fade.in(style="display: none;")
      img(src="/images/ajax-loader.gif" style="position: fixed; top: 45%; left: 49%;")

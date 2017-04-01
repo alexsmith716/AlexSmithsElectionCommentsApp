@@ -14,7 +14,6 @@ var helper = {
         
         showLoading();
 
-        /*
         $('[name="displayname"]').prop('required', true);
         $('[name="email"]').prop('required', true);
         $('[name="confirmEmail"]').prop('required', true);
@@ -24,8 +23,7 @@ var helper = {
         $('[name="lastname"]').prop('required', true);
         $('[name="city"]').prop('required', true);
         $('[name="state"]').prop('required', true);
-        */
-
+ 
         setTimeout(function() { hideLoading(); }, 500);
 
         helper.initializeJqueryEvents();
